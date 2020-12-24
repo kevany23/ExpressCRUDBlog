@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>title</title>
+  </head>
+  <body>
+    <h3><%= post.username %></h3>
+    <p><%= post.content %></p>
+    <form action =<%= "/deletePost/" + post.id %> method="post">
+      <input type="submit" value="Delete">
+    </form>
+    <form action=<%= "/editPost/" + post.id%> method="post">
+      <label for="content">Comment Text</label>
+      <br>
+      <textarea name="content" placeholder="Write a comment..."></textarea>
+      <br>
+      <label for="username">Enter your Username</label>
+      <br>
+      <input type="text" name="username" placeholder="username">
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>

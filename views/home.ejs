@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Universal Blog</title>
+  </head>
+  <body>
+    <h1>Blog</h1>
+    <ul style="list-style-type: none;">
+    <% for (let post of posts) { %>
+      <li>
+        <h3><%= post.username %></h3>
+        <p><%= post.content %></p>
+        <a href=<%= "/post/" + post.id %>>View</a>
+      </li>
+    <% } %>
+    </ul>
+    <br>
+    <h2>Leave a Post</h2>
+    <form action="/addPost" method="post">
+      <label for="content">Comment Text</label>
+      <br>
+      <textarea name="content" placeholder="Write a comment..."></textarea>
+      <br>
+      <label for="username">Enter your Username</label>
+      <br>
+      <input type="text" name="username" placeholder="username">
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
