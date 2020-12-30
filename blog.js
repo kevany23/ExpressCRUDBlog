@@ -1,5 +1,8 @@
 const express = require('express');
+const mongo = require('mongodb');
 const router = express.Router();
+const db = require('./database.js');
+const database = db.database;
 
 var posts = [
   {
@@ -15,52 +18,73 @@ var posts = [
 ];
 
 router.get('/', function(req, res) {
-  res.render('home.ejs', {posts: posts});
+  let posts = [];
+  db.database.collection("posts").find({}).toArray(function(err, result) {
+    if (err) {
+      res.status(404).send("Not found");
+    }
+    posts = result;
+    console.log(posts);
+    res.render('home.ejs', {posts: posts});
+  });
 })
 
 router.get('/post/:postId', function(req, res) {
   let {postId} = req.params;
-  if (postId < 0 || postId >= posts.length) {
-    console.log("Error");
-    res.status(404);
-    res.send("Comment not found.")
-  }
-  res.render('post.ejs', {post: posts[postId]});
+  db.database.collection('posts').findOne({_id: new  mongo.ObjectID(postId)}, function (err, result) {
+    if (err) {
+      console.log("Error");
+      res.status(404);
+      res.send("Comment not found");
+    }
+    let post = result;
+    res.render('post.ejs', {post: post});
+  });
 })
 
 router.post('/addPost', function(req, res) {
   const {username, content} = req.body;
-  posts.push({
-    id: posts.length,
+  db.database.collection('posts').insertOne({
     username: username,
     content: content
+  }, function(err, result) {
+    if (err) {
+      res.status(404);
+      res.send("Comment submit failed");
+    }
+    res.redirect('/');
   });
-  res.redirect('/');
 })
 
 router.post('/editPost/:postId', function(req, res) {
   const {postId} = req.params;
   const {username, content} = req.body;
-  if(postId < 0 ||postId >= posts.length) {
-    res.status(404);
-    res.send("Comment not found");
-  }
-  posts[postId].username = username;
-  posts[postId].content = content;
-  res.redirect('/');
+  let query = {_id: mongo.ObjectID(postId)};
+  let newValues = { $set:
+    {
+    username: username,
+    content: content
+  }};
+  db.database.collection('posts').updateOne(query, newValues, function(err, result) {
+    if (err) {
+      res.status(404);
+      res.send("Comment to update not found");
+    }
+    res.redirect('/');
+  });
 })
 
 router.post('/deletePost/:postId', function(req, res) {
   const {postId} = req.params;
-  if(postId < 0 ||postId >= posts.length) {
-    res.status(404);
-    res.send("Comment not found");
-  }
-  posts.splice(postId, 1);
-  for (let i = 0; i < posts.length; i++) {
-    posts[i].id = i;
-  }
-  res.redirect('/');
+  console.log(postId);
+  let query = {_id: mongo.ObjectID(postId)};
+  db.database.collection('posts').deleteOne(query, function(err, result) {
+    if (err) {
+      res.status(404);
+      res.send("Comment to delete not found");
+    }
+    res.redirect('/');
+  });
 })
 
 module.exports = router;

@@ -11,20 +11,20 @@
       <li>
         <h3><%= post.username %></h3>
         <p><%= post.content %></p>
-        <a href=<%= "/post/" + post.id %>>View</a>
+        <a href=<%= "/post/" + post._id %>>View</a>
       </li>
     <% } %>
     </ul>
     <br>
     <h2>Leave a Post</h2>
     <form action="/addPost" method="post">
-      <label for="content">Comment Text</label>
-      <br>
-      <textarea name="content" placeholder="Write a comment..."></textarea>
-      <br>
       <label for="username">Enter your Username</label>
       <br>
       <input type="text" name="username" placeholder="username">
+      <br>
+      <label for="content">Comment Text</label>
+      <br>
+      <textarea name="content" placeholder="Write a comment..."></textarea>
       <br>
       <input type="submit" value="Submit">
     </form>

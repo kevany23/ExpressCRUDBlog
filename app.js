@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const db = require('./database.js');
 const router = require('./blog.js');
 
 app.set('view engine', 'ejs');

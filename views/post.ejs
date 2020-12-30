@@ -7,17 +7,17 @@
   <body>
     <h3><%= post.username %></h3>
     <p><%= post.content %></p>
-    <form action =<%= "/deletePost/" + post.id %> method="post">
+    <form action =<%= "/deletePost/" + post._id %> method="post">
       <input type="submit" value="Delete">
     </form>
-    <form action=<%= "/editPost/" + post.id%> method="post">
-      <label for="content">Comment Text</label>
-      <br>
-      <textarea name="content" placeholder="Write a comment..."></textarea>
-      <br>
+    <form action=<%= "/editPost/" + post._id%> method="post">
       <label for="username">Enter your Username</label>
       <br>
       <input type="text" name="username" placeholder="username">
+      <br>
+      <label for="content">Comment Text</label>
+      <br>
+      <textarea name="content" placeholder="Write a comment..."></textarea>
       <br>
       <input type="submit" value="Submit">
     </form>
